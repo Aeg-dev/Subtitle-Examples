@@ -1,0 +1,182 @@
+<!-- ====================================================================== -->
+<!-- Universal Subtitle Format (USF)                                        -->
+<!-- Version 1.1                                                            -->
+<!--                                                                        -->
+<!-- Changelog : see usf-specs.htm html file                            -->
+<!-- ====================================================================== -->   
+
+
+<!-- ====================================================================== -->
+<!-- The root element                                                       -->
+<!-- ====================================================================== -->
+
+<!ELEMENT USFSubtitles (metadata, styles?, effects?, subtitles+)>
+<!ATTLIST USFSubtitles version CDATA #REQUIRED>
+
+
+<!-- ====================================================================== -->
+<!-- Some entities                                                          -->
+<!-- ====================================================================== -->
+
+<!ENTITY  % AlignmentType
+  "TopLeft   | TopCenter    | TopRight   |
+  MiddleLeft | MiddleCenter | MiddleRight|
+  BottomLeft | BottomCenter | BottomRight">
+  
+<!ENTITY  % RelativeToType "Window|Video">
+
+<!-- Margins can be in pixel or in % (in pixel by default) -->
+<!ENTITY  % PositionAttributeList "
+  alignment          (%AlignmentType;)  'BottomCenter'
+  horizontal-margin  CDATA              #IMPLIED
+  vertical-margin    CDATA              #IMPLIED
+  relative-to        (%RelativeToType;) 'Window'
+  rotate-x           CDATA              #IMPLIED
+  rotate-y           CDATA              #IMPLIED
+  rotate-z           CDATA              #IMPLIED">
+  
+<!ENTITY % BasicTagAndText "#PCDATA|i|b|u|font|br">
+
+<!ENTITY % LanguageExtType "Normal | EaringImpaired | DirectorComments | 
+                            Forced | Children">
+							
+<!ENTITY % SubtitleType		"open | closed">	
+
+<!-- ====================================================================== -->
+<!-- Common elements                                                        -->
+<!-- ====================================================================== -->
+
+
+<!-- ====================================================================== -->
+<!-- Metadata                                                               -->
+<!-- ====================================================================== -->
+
+<!ELEMENT metadata (title, author, language, languageext?, date?, comment?)>
+<!ELEMENT title       (#PCDATA)>
+<!ELEMENT author      (name, email?, url?, task?)>
+<!ELEMENT name        (#PCDATA)>
+<!ELEMENT email       (#PCDATA)> 
+<!ELEMENT url         (#PCDATA)>
+<!ELEMENT task        (#PCDATA)>
+<!ELEMENT language    (#PCDATA)>
+<!ATTLIST language    code CDATA #REQUIRED>  <!-- ISO 639-2: 3-alpha code -->
+<!ELEMENT languageext (#PCDATA)>
+<!ATTLIST languageext code (%LanguageExtType;) 'Normal'>
+<!ELEMENT date        (#PCDATA)>             <!-- ISO8601 -->
+<!ELEMENT comment     (%BasicTagAndText;)*>
+
+<!-- ====================================================================== -->
+<!-- Styles                                                                 -->
+<!-- ====================================================================== -->
+
+<!ELEMENT styles       (style+)>
+<!ELEMENT style        (fontstyle?, position?)>
+<!ATTLIST style        name       CDATA    #REQUIRED>
+<!ELEMENT fontstyle    EMPTY>
+<!-- color use #AARRGGBB, #00FF0000 is solid red -->
+<!-- alpha range = 0..100 -->
+<!ATTLIST fontstyle    face           CDATA    #IMPLIED
+                       family         CDATA    #IMPLIED
+                       size           CDATA    #IMPLIED
+                       color          CDATA    #IMPLIED
+                       italic         (yes|no)  "no"
+                       weight         (normal|bold|bolder|lighter|100|200|300|400|500|600|700|800|900) "normal"
+                       underline      (yes|no)  "no"
+                       wrap           (no|auto) "no"
+                       alpha          CDATA    #IMPLIED
+                       outline-color  CDATA    #IMPLIED
+                       shadow-color   CDATA    #IMPLIED
+                       outline-level  CDATA    #IMPLIED
+                       shadow-level   CDATA    #IMPLIED
+                       back-color     CDATA    #IMPLIED>   <!-- for karaoke -->
+<!ELEMENT position     EMPTY>
+<!ATTLIST position     %PositionAttributeList; >
+
+<!-- ====================================================================== -->
+<!-- Effect elements                                                        -->
+<!-- ====================================================================== -->
+
+<!ELEMENT effects      (effect+)>
+<!ELEMENT effect       (keyframes)>
+<!ATTLIST effect       name       CDATA    #REQUIRED>
+<!ELEMENT keyframes    (keyframe+)>
+<!ELEMENT keyframe     (fontstyle?,position?)>
+<!ATTLIST keyframe     position   CDATA    #REQUIRED> <!-- in % or ms -->
+
+<!-- ====================================================================== -->
+<!-- Subtitles                                                              -->
+<!-- ====================================================================== -->
+
+<!ELEMENT subtitles    (language?,languageext?,subtitle+)>
+<!ELEMENT subtitle     (text|image|karaoke|shape|comment)+>
+<!ATTLIST subtitle     start      CDATA #REQUIRED
+                       stop       CDATA #IMPLIED
+                       duration   CDATA #IMPLIED>
+
+<!-- ====================================================================== -->
+<!-- Text                                                                   -->
+<!-- ====================================================================== -->
+
+<!ELEMENT text     (%BasicTagAndText;)*>
+<!ATTLIST text     effect     CDATA #IMPLIED
+                   style      CDATA #IMPLIED
+                   speaker    CDATA #IMPLIED
+				   type		  (%SubtitleType;) 'closed' <!-- Open or closed subtitles, default is open and need not be set -->
+                   %PositionAttributeList;>
+                      
+<!ELEMENT i        (%BasicTagAndText;)*>
+<!ELEMENT b        (%BasicTagAndText;)*>
+<!ELEMENT u        (%BasicTagAndText;)*>
+<!ELEMENT br       EMPTY>
+
+<!ELEMENT font     (%BasicTagAndText;)*>
+<!ATTLIST font     face          CDATA #IMPLIED
+                   family        CDATA #IMPLIED
+                   size          CDATA #IMPLIED
+                   color         CDATA #IMPLIED
+                   outline-color CDATA #IMPLIED
+                   shadow-color  CDATA #IMPLIED
+                   outline-level CDATA #IMPLIED
+                   shadow-level  CDATA #IMPLIED
+                   back-color    CDATA #IMPLIED>   <!-- for karaoke -->
+                   
+<!-- ====================================================================== -->
+<!-- Karaoke                                                                -->
+<!-- ====================================================================== -->
+
+<!ELEMENT karaoke     (%BasicTagAndText;|k)*>
+<!ATTLIST karaoke     style      CDATA #IMPLIED
+                      %PositionAttributeList;>
+
+<!ELEMENT k           EMPTY>
+<!ATTLIST k           t       CDATA #REQUIRED> <!-- time from start in ms -->
+
+<!-- ====================================================================== -->
+<!-- Image                                                                  -->
+<!-- ====================================================================== -->
+
+<!ELEMENT image    (#PCDATA)>
+<!ATTLIST image    alpha      CDATA    #IMPLIED
+                   colorkey   CDATA    #IMPLIED
+                   %PositionAttributeList;>
+                   
+<!-- ====================================================================== -->
+<!-- Shape                                                                  -->
+<!-- ====================================================================== -->
+
+<!ELEMENT shape    (#PCDATA)>
+<!ATTLIST shape    type          CDATA #REQUIRED
+                   width         CDATA #REQUIRED
+                   height        CDATA #REQUIRED
+                   color         CDATA #IMPLIED
+                   outline-color CDATA #IMPLIED
+                   shadow-color  CDATA #IMPLIED
+                   outline-level CDATA #IMPLIED
+                   shadow-level  CDATA #IMPLIED
+                   %PositionAttributeList;>
+
+<!-- ====================================================================== -->
+<!-- Comment                                                                -->
+<!-- ====================================================================== -->
+
+<!ELEMENT comment     (%BasicTagAndText;)*>				   				   

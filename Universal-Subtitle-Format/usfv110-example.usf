@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<USFSubtitles version="1.0">
+  <metadata>
+    <title>The Universal Subtitle Format sample</title>
+    <author>
+      <name>[Toff]</name>
+      <email>christophe.paris@free.fr</email>
+      <url>http://christophe.paris.free.fr/</url>
+    </author>
+    <language code="eng">English</language>
+    <date>2002-11-08</date>
+    <comment>This is a short example of USF.</comment>
+  </metadata>
+
+  <styles>
+    <!-- Here we redefine the default style -->
+    <style name="Default" >
+      <fontstyle face="Arial" size="24" color="#FFFFFF" back-color="#AAAAAA" />
+      <position alignment="BottomCenter" vertical-margin="20%"
+                relative-to="Window" />
+    </style>
+        
+    <!-- All others styles herite from the default style -->
+    <style name="NarratorSpeaking">
+      <fontstyle italic="yes" />
+    </style>
+    
+    <style name="MusicLyrics">
+      <fontstyle back-color="#550000" color="#FFFF00" bold="yes" />
+    </style>
+  </style>
+  
+  <subtitles>
+    <subtitle start="00:00:00.000" stop="00:00:05.000">         
+      <text alignment="MiddleCenter">Welcome to 
+        <b>The Core Media Player</b></text>
+      <image alignment="TopRight" vertical-margin="20" horizontal-margin="20"
+             colorkey="#FFFFFF">TCMP_Logo.bmp</image>
+    </subtitle>
+    
+    <subtitle start="00:00:06.000" stop="00:00:10.000">
+      <text style="NarratorSpeaking" speaker="Toff">Hi! This is a <font size="16">
+        small</font> sample, let's sing a song.</text>
+    </subtitle>
+    
+    <subtitle start="00:00:06.000" stop="00:00:10.000">
+      <karaoke style="MusicLyrics"><k t="700"/>La! La! La! <k t="1000"/>
+        Karokeeeeeeeee <k t="100"/>is <k t="200"/>fun !</text>
+    </subtitle>
+  <subtitles>
+  
+</USFSubtitles>
